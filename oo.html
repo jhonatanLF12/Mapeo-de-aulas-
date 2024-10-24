@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Edificios y Aulas</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        #map {
+            height: 600px;
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        #searchBox {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Mapa de Edificios y Aulas</h1>
+<input type="text" id="searchBox" placeholder="Buscar aula o edificio..." />
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    // Crear un mapa centrado
+    var map = L.map('map').setView([-17.3909, -66.0686], 16);
+
+    // Agregar una capa de mapa
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // Definir íconos personalizados
+    var edificioIcon = L.icon({
+        iconUrl: 'erikgei.png.png', // Reemplaza con la ruta a tu ícono de edificio
+        iconSize: [32, 32],
+        iconAnchor: [16, 32]
+    });
+
+    var aulaIcon = L.icon({
+        iconUrl: 'erikgei.png.png', // Reemplaza con la ruta a tu ícono de aula
+        iconSize: [32, 32],
+        iconAnchor: [16, 32]
+    });
+
+    // Datos de edificios
+    var edificios = [
+        { nombre: "Biblioteca", lat: -17.39094, lon: -66.06847, descripcion: "Capacidad para 80 estudiantes aprox. Cuenta con 4 computadoras." },
+        { nombre: "Atención al estudiante", lat: -17.39086, lon: -66.06850, descripcion: "Trámites, pagos y carnet estudiantil." },
+        { nombre: "Cartera", lat: -17.39069, lon: -66.06846, descripcion: "Administración de pagos de estudiantes." },
+        { nombre: "Sala de Docentes", lat: -17.39073, lon: -66.06838, descripcion: "Espacio para docentes." },
+        { nombre: "Coordinador Area Clinica", lat: -17.39076, lon: -66.06836, descripcion: "Coordinación de áreas clínicas." },
+        { nombre: "PLANTA BAJA - Secretaria Regional", lat: -17.39094, lon: -66.06839, descripcion: "Gestión académica." },
+        { nombre: "Jefatura", lat: -17.39058, lon: -66.06836, descripcion: "Atención de casos de estudiantes." },
+        { nombre: "Mantenimiento", lat: -17.39077, lon: -66.06825, descripcion: "Herramientas para mantenimiento." },
+        { nombre: "G11", lat: -17.39074, lon: -66.06835, descripcion: "Capacidad para 30 estudiantes." },
+    ];
+
+    // Datos de aulas
+    var aulas = [
+        { nombre: "Aulas Marketing", lat: -17.39033, lon: -66.06894, descripcion: "Capacidad para 36 a 40 estudiantes." },
+        { nombre: "A-1", lat: -17.39033, lon: -66.06894, descripcion: "Aula equipada con recursos para enseñanza." },
+        { nombre: "A-2", lat: -17.39036, lon: -66.06886, descripcion: "Aula para actividades grupales." },
+        { nombre: "A-3", lat: -17.39041, lon: -66.06879, descripcion: "Aula con herramientas audiovisuales." },
+        { nombre: "Depósito", lat: -17.39046, lon: -66.06867, descripcion: "Aula y depósito de limpieza." },
+        { nombre: "D-4", lat: -17.39042, lon: -66.06875, descripcion: "Aula para talleres prácticos." },
+        { nombre: "CC-1", lat: -17.39068, lon: -66.06883, descripcion: "Centro con 18 computadoras." },
+        { nombre: "D-arquitectura", lat: -17.39051, lon: -66.06866, descripcion: "Capacidad para 30 personas." },
+        { nombre: "M-I", lat: -17.39036, lon: -66.06889, descripcion: "Sala de información." },
+        { nombre: "Caja", lat: -17.39031, lon: -66.06878, descripcion: "Caja y biblioteca." },
+    ];
+
+    // Almacenar marcadores en un array
+    var markers = [];
+
+    // Agregar marcadores de edificios al mapa
+    edificios.forEach(function(edificio) {
+        var edificioMarker = L.marker([edificio.lat, edificio.lon], { icon: edificioIcon })
+            .addTo(map)
+            .bindPopup(`<b>${edificio.nombre}</b><br>${edificio.descripcion}`)
+            .bindTooltip(edificio.nombre, { permanent: true, direction: 'top' });
+
+        markers.push(edificioMarker); // Guardar el marcador en el array
+
+        edificioMarker.on('mouseover', function() {
+            this.openTooltip();
+        });
+
+        edificioMarker.on('mouseout', function() {
+            this.closeTooltip();
+        });
+    });
+
+    // Agregar marcadores de aulas al mapa
+    aulas.forEach(function(aula) {
+        var aulaMarker = L.marker([aula.lat, aula.lon], { icon: aulaIcon })
+            .addTo(map)
+            .bindPopup(`<b>${aula.nombre}</b><br>${aula.descripcion}`)
+            .bindTooltip(aula.nombre, { permanent: true, direction: 'top' });
+
+        markers.push(aulaMarker); // Guardar el marcador en el array
+
+        aulaMarker.on('mouseover', function() {
+            this.openTooltip();
+        });
+
+        aulaMarker.on('mouseout', function() {
+            this.closeTooltip();
+        });
+    });
+
+    // Funcionalidad de búsqueda
+    document.getElementById('searchBox').addEventListener('input', function(e) {
+        var searchText = e.target.value.toLowerCase();
+        markers.forEach(function(marker) {
+            if (marker.getPopup().getContent().toLowerCase().includes(searchText)) {
+                marker.openPopup();
+            } else {
+                marker.closePopup();
+            }
+        });
+    });
+
+    // Definir rutas entre edificios y aulas (opcional)
+    var rutas = [
+        [[-17.39094, -66.06847], [-17.39086, -66.06850]],
+        [[-17.39094, -66.06847], [-17.39069, -66.06846]],
+        [[-17.39086, -66.06850], [-17.39073, -66.06838]],
+        [[-17.39073, -66.06838], [-17.39076, -66.06836]],
+        [[-17.39069, -66.06846], [-17.39094, -66.06839]],
+        [[-17.39058, -66.06836], [-17.39077, -66.06825]],
+        [[-17.39076, -66.06836], [-17.39074, -66.06835]],
+        [[-17.39094, -66.06847], [-17.39033, -66.06894]],
+        [[-17.39086, -66.06850], [-17.39042, -66.06875]],
+        [[-17.39069, -66.06846], [-17.39036, -66.06886]],
+        [[-17.39076, -66.06836], [-17.39068, -66.06883]],
+        [[-17.39073, -66.06838], [-17.39058, -66.06836]],
+        [[-17.39074, -66.06835], [-17.39031, -66.06878]]
+    ];
+
+    // Dibujar las rutas en el mapa
+    rutas.forEach(function(routeCoordinates) {
+        L.polyline(routeCoordinates, { color: 'blue' }).addTo(map);
+    });
+</script>
+
+</body>
+</html>

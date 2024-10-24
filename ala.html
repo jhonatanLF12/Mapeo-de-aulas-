@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Edificios y Aulas</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Mapa de Edificios y Aulas</h1>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    // Crear un mapa centrado
+    var map = L.map('map').setView([-17.3909, -66.0686], 16); // Coordenadas del centro
+
+    // Agregar una capa de mapa
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // Definir íconos personalizados
+    var edificioIcon = L.icon({
+        iconUrl: 'erikgei.png.png', // Reemplaza con la ruta a tu ícono de edificio
+        iconSize: [32, 32],
+        iconAnchor: [16, 32]
+    });
+
+    var aulaIcon = L.icon({
+        iconUrl: 'erikgei.png.png', // Reemplaza con la ruta a tu ícono de aula
+        iconSize: [32, 32],
+        iconAnchor: [16, 32]
+    });
+
+    // Datos de edificios
+    var edificios = [
+        {
+            nombre: "Biblioteca",
+            lat: -17.39094,
+            lon: -66.06847,
+            descripcion: "Capacidad para 80 estudiantes aprox. Cuenta con 4 computadoras."
+        },
+        {
+            nombre: "Atención al estudiante",
+            lat: -17.39086,
+            lon: -66.06850,
+            descripcion: "Se pagan todo tipo de deudas, se hacen trámites y carnet estudiantil."
+        },
+        {
+            nombre: "Cartera",
+            lat: -17.39069,
+            lon: -66.06846,
+            descripcion: "Se administran pagos realizados y a deber de los estudiantes."
+        },
+        {
+            nombre: "Sala de Docentes",
+            lat: -17.39073,
+            lon: -66.06838,
+            descripcion: "Espacio para los docentes de las diferentes carreras."
+        },
+        {
+            nombre: "Coordinador Area Clinica",
+            lat: -17.39076,
+            lon: -66.06836,
+            descripcion: "Se coordinan áreas clínicas e internado para el área de medicina."
+        },
+        {
+            nombre: "PLANTA BAJA - Secretaria Regional",
+            lat: -17.39094,
+            lon: -66.06839,
+            descripcion: "Se atienden asuntos relacionados con la gestión académica."
+        },
+        {
+            nombre: "Jefatura",
+            lat: -17.39058,
+            lon: -66.06836,
+            descripcion: "Se atienden diferentes casos de los estudiantes de las diferentes carreras."
+        },
+        {
+            nombre: "Mantenimiento",
+            lat: -17.39077,
+            lon: -66.06825,
+            descripcion: "Cuenta con herramientas para garantizar el buen funcionamiento de las instalaciones."
+        },
+        {
+            nombre: "G11",
+            lat: -17.39074,
+            lon: -66.06835,
+            descripcion: "Capacidad para 30 estudiantes del área de medicina."
+        },
+    ];
+
+    // Datos de aulas
+    var aulas = [
+        {
+            nombre: "Aulas Marketing",
+            lat: -17.39033,
+            lon: -66.06894,
+            descripcion: "Aulas con capacidad para 36 a 40 estudiantes, destinadas al área de marketing digital."
+        },
+        {
+            nombre: "A-1",
+            lat: -17.39033,
+            lon: -66.06894,
+            descripcion: "Aula equipada con recursos para enseñanza."
+        },
+        {
+            nombre: "A-2",
+            lat: -17.39036,
+            lon: -66.06886,
+            descripcion: "Aula equipada para actividades grupales."
+        },
+        {
+            nombre: "A-3",
+            lat: -17.39041,
+            lon: -66.06879,
+            descripcion: "Aula con herramientas audiovisuales."
+        },
+        {
+            nombre: "Depósito",
+            lat: -17.39046,
+            lon: -66.06867,
+            descripcion: "Aulas con capacidad para 30 a 40 estudiantes de arquitectura y un depósito de limpieza."
+        },
+        {
+            nombre: "D-4",
+            lat: -17.39042,
+            lon: -66.06875,
+            descripcion: "Aula para talleres prácticos."
+        },
+        {
+            nombre: "CC-1",
+            lat: -17.39068,
+            lon: -66.06883,
+            descripcion: "Cada centro cuenta con 18 computadoras."
+        },
+        {
+            nombre: "D-arquitectura",
+            lat: -17.39051,
+            lon: -66.06866,
+            descripcion: "Aulas con capacidad para unas 30 personas."
+        },
+        {
+            nombre: "M-I",
+            lat: -17.39036,
+            lon: -66.06889,
+            descripcion: "Sala de información con aproximadamente 10 computadoras."
+        },
+        {
+            nombre: "Caja",
+            lat: -17.39031,
+            lon: -66.06878,
+            descripcion: "Caja y biblioteca con capacidad para 60 a 70 estudiantes."
+        },
+    ];
+
+    // Agregar marcadores de edificios al mapa
+    edificios.forEach(function(edificio) {
+        L.marker([edificio.lat, edificio.lon], { icon: edificioIcon })
+            .addTo(map)
+            .bindPopup(`<strong>${edificio.nombre}</strong><br>${edificio.descripcion}`);
+    });
+
+    // Agregar marcadores de aulas al mapa
+    aulas.forEach(function(aula) {
+        L.marker([aula.lat, aula.lon], { icon: aulaIcon })
+            .addTo(map)
+            .bindPopup(`<strong>${aula.nombre}</strong><br>${aula.descripcion}`);
+    });
+</script>
+
+</body>
+</html>
+
